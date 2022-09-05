@@ -7,7 +7,20 @@ var taskFormHandler = function(event) {
     event.preventDefault();
     var taskNameInput = document.querySelector("input[name='task-name']").value;
     var taskTypeInput = document.querySelector("select[name='task-type']").value;
+    var isEdit = formEl.hasAttribute("data-task-id");
+    console.log(isEdit);
 
+    if (isEdit) {
+        var taskId = formEl.getAttribute("data-task-id");
+        completeEditTask(taskNameInput, taskTypeInput, taskId);
+    }
+
+    else {
+        var taskDataObj = {
+        name: taskNameInput,
+        type: taskTypeInput
+        };
+    }
     var taskDataObj = {
         name: taskNameInput,
         type: taskTypeInput
@@ -109,7 +122,7 @@ var taskButtonHandler = function(event) {
         deleteTask(taskId);
     }  */
 };
-// taskSelected below is not connectec to anything?
+
 var editTask = function(taskId) {
 
     var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
@@ -125,6 +138,18 @@ var editTask = function(taskId) {
 var deleteTask = function(taskId) {
     var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
     taskSelected.remove();
+};
+
+var completeEditTask = function(taskName, taskType, taskId) {
+    var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+    taskSelected.querySelector("h3.task-name").textContent = taskName;
+    taskSelected.querySelector("span.task-type").textContent = taskType;
+
+    alert("Task Updated!");
+
+    formEl.removeAttribute("data-task-id");
+    document.querySelector("#save-task").textContent = "Add Task";
+//need to add changes to move items whem edited or completed
 };
 
 pageContentEl.addEventListener("click", taskButtonHandler);
